@@ -1,0 +1,11 @@
+[FORMAT]
+max-line-length = 79 # Pep 8 standard
+
+[MASTER]
+ignore = .git, __pycache__, .venv
+
+[MESSAGES CONTROL]
+disable = logging-fstring-interpolation, broad-exception-caught
+
+[BASIC]
+good-names = e,df,k,ax,i
