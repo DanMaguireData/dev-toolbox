@@ -47,10 +47,7 @@ Open main.py and modify the initial_input dictionary at the bottom of the file t
 ```python
 # In main.py
 if __name__ == "__main__":
-    initial_input = {
-        "file_path": "example_code/math.py",
-        "function_name": "add"
-    }
+    initial_input = {"file_path": "example_code/math.py", "function_name": "add"}
     # ... rest of the script
 ```
 2. Run the Script:
@@ -87,18 +84,47 @@ The tool will generate a test file at tests/example_code/math/test_add.py:
 import pytest
 from example_code.math import add
 
+
 def test_add_positive_integers():
     """Tests adding two positive integers."""
     assert add(2, 3) == 5
 
+
 def test_add_with_zero():
     """Tests adding an integer and zero."""
     assert add(7, 0) == 7
+
 
 def test_add_with_string_input_raises_type_error():
     """Tests that adding a string raises a TypeError."""
     with pytest.raises(TypeError):
         add("a", 5)
 
+
 # ... and many more test cases ...
 ```
+
+
+### 3. Setting Up the Project Environment
+
+1.  **Clone the repository (if you haven't already):**
+
+2.  **Create and activate a virtual environment:**
+    This isolates project dependencies.
+    ```bash
+    python -m venv .venv
+    ```
+    Activate it:
+    *   On macOS/Linux:
+        ```bash
+        source .venv/bin/activate
+        ```
+    *   On Windows (Git Bash):
+        ```bash
+        source .venv/Scripts/activate
+        ```
+    *   On Windows (CMD/PowerShell):
+        ```bash
+        .venv\Scripts\activate
+        ```
+    Your command prompt should change to indicate the active virtual environment.
