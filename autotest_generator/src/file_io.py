@@ -1,8 +1,12 @@
 """Functions responsible for loading and parsing files."""
 
 import ast
+import logging
 import os
 from typing import List, Optional, TypedDict
+
+# Logger
+logger = logging.getLogger(__name__)
 
 
 class FunctionDetails(TypedDict):
@@ -150,15 +154,14 @@ def save_test_file(
 
     # 5. Combine the subdirectory and filename into the full output path.
     output_path = os.path.join(test_subdirectory, test_filename)
-    print(output_path)
 
     # 6. Ensure the entire directory path exists before writing the file.
     os.makedirs(test_subdirectory, exist_ok=True)
 
     # 7. Write the generated code to the new, specific file path.
-    with open(output_path, "w", encoding="utf-8") as file:
+    with open(output_path, "w+", encoding="utf-8") as file:
         file.write(generated_code)
 
-    print(f"\n--- Test file saved to {output_path} ---")
+    logger.info(f"Test File saved to: {output_path}")
 
     return output_path

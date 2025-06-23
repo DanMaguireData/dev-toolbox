@@ -5,6 +5,7 @@ Generate only the Python code for one def test_...(): function.
 Do not include any import statements or other surrounding code (e.g., class definitions, helper functions outside the test), you can assume this has been done already in the enviroment the code is being generated.
 Generate the test function name as test_ followed by the snake_case version of the description field from the test_case_json (e.g., if description is "Handles Valid Input", the name should be test_handles_valid_input).
 The inputs field in the test_case_json provides keyword arguments for the function under test. Assume these are the only arguments needed.
+Do not include any comments in the code, only the test function. Do not include any markdown code blocks e.g. ```python.
 If the test_case_json['expected_outcome'] object contains a returns key:
 a. Retrieve keyword arguments from the inputs field of the JSON.
 b. Call the function under test: actual_return = {function_name}(**test_case_json['inputs']).

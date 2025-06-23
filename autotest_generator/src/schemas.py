@@ -1,6 +1,6 @@
 """Contains schemas used throughout code and as part of prompting."""
 
-from typing import Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 from pydantic import BaseModel, Field
 
@@ -35,20 +35,12 @@ class ExpectedError(BaseModel):
 
 
 # Define the structure of a single test case
-class TestCase(BaseModel):
+class TestCaseBase(BaseModel):
     """A single, self-contained test case."""
 
     description: str = Field(
         ...,
         description="A brief, one-sentence description of the test's purpose.",
-    )
-    inputs: Optional[str] = Field(
-        ...,
-        # Makes typing easier
-        description=(
-            "A JSON string representing the dictionary of"
-            ' function inputs. Example: \'{"a": 1, "b": 2}\''
-        ),
     )
     expected_outcome: Union[ExpectedReturnValue, ExpectedError] = Field(
         ...,
@@ -59,16 +51,53 @@ class TestCase(BaseModel):
     )
 
 
+class StorageTestCase(TestCaseBase):
+    """A test case designed for serialization, where inputs are a JSON
+    string."""
+
+    inputs: Optional[str] = Field(
+        ...,
+        description=(
+            "A JSON string representing the dictionary of "
+            'function inputs. Example: \'{"a": 1, "b": 2}\''
+        ),
+    )
+
+
+# --- 3. Define the runnable version ---
+class RunnableTestCase(TestCaseBase):
+    """A test case designed for runtime execution, where inputs are a parsed
+    dictionary."""
+
+    inputs: Optional[Dict[str, Any]] = Field(
+        ...,
+        description="A dictionary of function inputs, ready for execution.",
+    )
+
+
+class RunnableTestSuite(BaseModel):
+    """A comprehensive test suite for a single function, categorized by test
+    type."""
+
+    happy_path_cases: List[RunnableTestCase] = Field(
+        ..., alias="Happy Path / Typical Cases"
+    )
+    edge_cases: List[RunnableTestCase] = Field(..., alias="Edge Cases")
+    error_conditions: List[RunnableTestCase] = Field(
+        ..., alias="Error Conditions / Invalid Input"
+    )
+
+
 # Define the top-level structure for the entire test suite
 class TestSuite(BaseModel):
     """A comprehensive test suite for a single function, categorized by test
     type."""
 
-    happy_path_cases: List[TestCase] = Field(
+    happy_path_cases: List[StorageTestCase] = Field(
         ..., alias="Happy Path / Typical Cases"
     )
-    edge_cases: List[TestCase] = Field(..., alias="Edge Cases")
-    error_conditions: List[TestCase] = Field(
+    edge_cases: List[StorageTestCase] = Field(..., alias="Edge Cases")
+    error_conditions: List[StorageTestCase] = Field(
         ..., alias="Error Conditions / Invalid Input"
     )
 
@@ -116,7 +145,7 @@ class ReviewFeedback(BaseModel):
     class Config:
         """Additional config information."""
 
-        schema_extra = {
+        json_schema_extra = {
             "example_perfect": {
                 "is_perfect": True,
                 "improvements_needed": None,
