@@ -42,7 +42,7 @@ class TestCase(BaseModel):
         ...,
         description="A brief, one-sentence description of the test's purpose.",
     )
-    inputs: str = Field(
+    inputs: Optional[str] = Field(
         ...,
         # Makes typing easier
         description=(
@@ -112,6 +112,7 @@ class ReviewFeedback(BaseModel):
         ),
     )
 
+    # pylint: disable=too-few-public-methods
     class Config:
         """Additional config information."""
 

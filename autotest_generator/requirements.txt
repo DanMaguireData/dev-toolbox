@@ -1,4 +1,6 @@
+dotenv
 langchain
+langchain_core
 langchain_openai
 langgraph
 pydantic
